@@ -1,0 +1,27 @@
+{
+  "name": "@circle-free/blockchain-mq-js",
+  "version": "1.0.0",
+  "description": "Blockchain Skippable Message Queue",
+  "main": "client.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/circle-free/blockchain-mq-js.git"
+  },
+  "keywords": [
+    "blockchain",
+    "ethereum",
+    "queue"
+  ],
+  "author": "Circle-Free",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/circle-free/blockchain-mq-js/issues"
+  },
+  "homepage": "https://github.com/circle-free/blockchain-mq-js#readme",
+  "dependencies": {
+    "web3": "^1.0.0-beta.36"
+  }
+}
