@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/circle-free/blockchain-mq-js#readme",
   "dependencies": {
+    "solc": "^0.5.12",
     "web3": "^1.0.0-beta.36"
   }
 }

@@ -3,6 +3,7 @@
 const EventEmitter = require('events');
 const KeyManager = require('./keyManager');
 const Web3 = require('web3');
+const solc = require('solc');
 const {contractABI, contractAddress} = require('./config.json');
 
 // const eventNames = contractABI.filter(abiItem => abiItem.type === 'event').map(abiItem => abiItem.name);
@@ -52,6 +53,32 @@ const decodeLog = (web3, eventABI, log) => web3.eth.abi.decodeLog(eventABI.input
 const extractDecodedLog = (web3, receipt, eventName) => {
 	const eventABI = getEventABI(eventName);
 	return decodeLog(web3, eventABI, extractLog(receipt, eventABI))
+};
+
+const objectToByteCode = json => {
+	let codeString = 'contract genericFlatMap { mapping (bytes32 => bytes) private properties;';
+
+	const writeProperties = (obj, path) => {
+		if (!obj) {
+			return;
+		}
+
+		if (typeof obj !== 'object') {
+			const objectKey = Web3.utils.keccak256(path);
+			codeString = codeString.concat(`properties[${objectKey}] = ${obj};`);
+			return;
+		}
+
+		for (let k in obj) {
+			writeProperties(obj[k], path ? `${path}.${k}` : k);
+		}
+	};
+
+	codeString = codeString.concat('function get(string propertyPath) external view returns (bytes) { return properties[keccak256(propertyPath)]; } })';
+
+	let outputs = solc.compile(data, 1);
+
+	return outputs.contracts['genericFlatMap'].bytecode;
 };
 
 class ChainInterface{
@@ -123,7 +150,7 @@ class ChainInterface{
 					}
 
 					const log = extractDecodedLog(web3, receipt, EVENT_NAME);
-					
+
 					if (!log) {
 						throw `No log for joining channel.`;
 					}
@@ -147,7 +174,7 @@ class ChainInterface{
 					}
 
 					const log = extractDecodedLog(web3, receipt, EVENT_NAME);
-					
+
 					if (!log) {
 						throw `No log for joining channel.`;
 					}

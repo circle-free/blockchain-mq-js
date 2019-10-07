@@ -158,7 +158,7 @@ async function createMessage(data, messageActions) {
 			if (result.error) {
 				throw Error(`Failed to mark as read: ${result.error}.`);
 			}
-			
+
 			return true;
 		}
 	});
